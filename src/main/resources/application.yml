@@ -66,3 +66,8 @@ jedis.config.test.while.idle: true
 jedis.config.num.tests.per.eviction.run: 10
 redisson.config.cluster.mode: false
 redisson.config.override: true
+
+
+security.jwt.secret-key: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+  # 1h in millisecond
+security.jwt.expiration-time: 3600000
