@@ -5,6 +5,7 @@ import com.ireveal.EstateRunner.util.ResponseUtilService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.errors.AuthorizationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -47,6 +48,13 @@ public class GlobalControllerAdvice {
         log.error("Unknown server error", e);
 
         return responseUtilService.buildErrorResponse("There was an error processing the request, Please try again later...", httpServletRequest);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public EstateRunnerResponse handleAuthorizationException(Exception e, HttpServletRequest httpServletRequest){
+        log.error("Authourization exception: {}", e);
+        return responseUtilService.buildErrorResponse(e.getMessage(), httpServletRequest);
     }
 
     @ExceptionHandler(UndeclaredThrowableException.class)

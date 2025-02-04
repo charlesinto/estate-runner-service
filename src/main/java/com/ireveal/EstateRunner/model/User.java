@@ -1,17 +1,8 @@
 package com.ireveal.EstateRunner.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
+import com.ireveal.EstateRunner.enums.UserAuthenticationStrategy;
+import jakarta.persistence.*;
+import lombok.*;
 
 /**
  * @author CHARLES ONUORAH
@@ -23,48 +14,44 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
-public class User extends BaseEntity implements UserDetails {
+@Builder
+public class User extends BaseEntity {
+
+
     @Column
     private String firstName;
     @Column
     private String lastName;
-    @Column
-    private String email;
+
+    @Column(nullable = false, unique = true)
+    private String userName;
+
     @Column
     private String phoneNumber;
 
     @Column
     private String password;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
+    @Column
+    private String email;
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+    @Column(name = "authentication_strategy", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserAuthenticationStrategy authenticationStrategy = UserAuthenticationStrategy.ESTATE_APP;
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    @Column(name = "is_account_non_expired")
+    private boolean isAccountNonExpired = true;
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+    @Column(name = "is_account_non_locked")
+    private boolean isAccountNonLocked = true;
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+    @Column(name = "is_credentials_non_expired")
+    private boolean isCredentialsNonExpired = true;
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    @Column(name = "is_enabled")
+    private boolean isEnabled = true;
+
+
 }

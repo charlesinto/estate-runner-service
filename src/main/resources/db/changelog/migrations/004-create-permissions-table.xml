@@ -1,0 +1,44 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="20250204-005" author="charles_onuorah">
+        <preConditions>
+            <not>
+                <tableExists tableName="role_permissions" />
+            </not>
+        </preConditions>
+        <createTable tableName="role_permissions">
+            <column autoIncrement="false" name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="role_id" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="authority_id" type="VARCHAR(255)">
+                <constraints nullable="false"  />
+            </column>
+
+            <!--Base entity columns-->
+            <column name="status" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="last_modified_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="role_permissions" baseColumnNames="role_id" constraintName="FK_permission_role_id" referencedTableName="roles"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="role_permissions" baseColumnNames="authority_id" constraintName="FK_permission_authority_id" referencedTableName="authorities"
+                                 referencedColumnNames="id" />
+    </changeSet>
+</databaseChangeLog>

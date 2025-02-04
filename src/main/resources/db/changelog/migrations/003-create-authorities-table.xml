@@ -1,0 +1,57 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet  author="charles_onuorah" id="20250204-003">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="authorities" />
+            </not>
+        </preConditions>
+        <createTable tableName="authorities">
+            <column autoIncrement="false" name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="VARCHAR(100)"  >
+                <constraints nullable="false" unique="true" />
+            </column>
+
+
+            <!--Base entity columns-->
+            <column name="status" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="last_modified_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="charles_onuorah" id="20250204-004">
+        <preConditions>
+            <tableExists tableName="authorities" />
+        </preConditions>
+        <sql>
+            INSERT INTO authorities (id, name, status, created_by, modified_by, created_on, last_modified_on)
+            VALUES (UUID(),'ESR_SUPER_ADMIN', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_ROLE_MANAGE', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_AUTHORITIES_MANAGE', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_MANAGE_PERMISSION', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_OPS_RESIDENT_CREATE', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_OPS_RESIDENT_REMOVE', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_OPS_RESIDENT_VIEW', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_OPS_ACCESS_CODE_CREATE', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_OPS_RESIDENT_UPDATE', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_OPS_SECURITY_CREATE', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_OPS_SECURITY_VIEW', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_OPS_SECURITY_REMOVE', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW()),
+             (UUID(),'ESR_OPS_SECURITY_UPDATE', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW());
+        </sql>
+    </changeSet>
+</databaseChangeLog>

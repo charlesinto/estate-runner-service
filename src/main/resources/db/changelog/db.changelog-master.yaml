@@ -3,3 +3,11 @@ databaseChangeLog:
       file: db/changelog/migrations/001-quartz-schema.xml
   - include:
       file: db/changelog/migrations/002-create-role-table.xml
+  - include:
+      file: db/changelog/migrations/003-create-authorities-table.xml
+  - include:
+      file: db/changelog/migrations/004-create-permissions-table.xml
+  - include:
+      file: db/changelog/migrations/006-create-user-table.xml
+  - include:
+      file: db/changelog/migrations/005-create-backoffice-user-role.xml
