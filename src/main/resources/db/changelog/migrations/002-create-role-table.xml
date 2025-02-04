@@ -1,0 +1,49 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet author="charles_onuorah" id="20250204-001">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="roles" />
+            </not>
+        </preConditions>
+        <createTable tableName="roles">
+            <column autoIncrement="false" name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"  >
+                <constraints nullable="false" unique="true" />
+            </column>
+
+            <!--Base entity columns-->
+            <column name="status" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="last_modified_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+    </changeSet>
+
+    <changeSet author="charles_onuorah" id="20250204-002">
+        <preConditions onFail="MARK_RAN">
+
+                <tableExists tableName="roles" />
+
+        </preConditions>
+        <sql>
+            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(),'SUPER_ADMIN', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW());
+            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(), 'ADMIN', 'ACTIVE',  'SYSTEM', 'SYSTEM', NOW(), NOW());
+            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(), 'RESIDENT', 'ACTIVE',  'SYSTEM', 'SYSTEM', NOW(), NOW());
+            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(),'VENDOR', 'ACTIVE',  'SYSTEM', 'SYSTEM', NOW(), NOW());
+            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(), 'SECURITY', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW());
+        </sql>
+    </changeSet>
+</databaseChangeLog>
