@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -54,6 +55,13 @@ public class GlobalControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public EstateRunnerResponse handleAuthorizationException(Exception e, HttpServletRequest httpServletRequest){
         log.error("Authourization exception: {}", e);
+        return responseUtilService.buildErrorResponse(e.getMessage(), httpServletRequest);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public EstateRunnerResponse handleAuthenticationException(Exception e, HttpServletRequest httpServletRequest){
+        log.error("Unauthorized error: {}", e);
         return responseUtilService.buildErrorResponse(e.getMessage(), httpServletRequest);
     }
 

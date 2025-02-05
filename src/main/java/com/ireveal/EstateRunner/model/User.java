@@ -3,6 +3,13 @@ package com.ireveal.EstateRunner.model;
 import com.ireveal.EstateRunner.enums.UserAuthenticationStrategy;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author CHARLES ONUORAH
@@ -17,7 +24,7 @@ import lombok.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
 
     @Column
@@ -53,5 +60,15 @@ public class User extends BaseEntity {
     @Column(name = "is_enabled")
     private boolean isEnabled = true;
 
+    private Set<SimpleGrantedAuthority> authorities;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+       return  authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
 }

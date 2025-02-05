@@ -9,14 +9,11 @@ import com.ireveal.EstateRunner.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.AuthorizationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +34,7 @@ public class DefaultUserDetailService implements UserDetailsService {
     private final BackofficeUserRoleRepository backofficeUserRoleRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Set<SimpleGrantedAuthority> authorities;
         if (UserAuthenticationStrategy.BACKOFFICE.equals(user.getAuthenticationStrategy())) {
@@ -45,49 +42,20 @@ public class DefaultUserDetailService implements UserDetailsService {
         } else {
             authorities = new HashSet<>(getUserGrantedAuthorities(user));
         }
-        return new UserDetails() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return authorities;
-            }
+        user.setAuthorities(authorities);
 
-            @Override
-            public String getPassword() {
-                return user.getPassword();
-            }
-
-            @Override
-            public String getUsername() {
-                return user.getUserName();
-            }
-
-            @Override
-            public boolean isAccountNonExpired() {
-                return user.isAccountNonExpired();
-            }
-
-            @Override
-            public boolean isAccountNonLocked() {
-                return  user.isAccountNonLocked();
-            }
-
-            @Override
-            public boolean isCredentialsNonExpired() {
-                return user.isCredentialsNonExpired();
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return user.isEnabled();
-            }
-        };
+        return user;
     }
 
     private List<SimpleGrantedAuthority> getAdminGrantedAuthorities(User user) {
         BackofficeUserRole backofficeUserRole = backofficeUserRoleRepository.findByUser_Id(user.getId()).orElseThrow(() -> new AuthorizationException("You do not have access to this system. Please contact system administrator"));
-        return rolePermissionRepository.findAllByRole_Name(backofficeUserRole.getRole().getName())
+        List<SimpleGrantedAuthority> simpleGrantedAuthorityList = rolePermissionRepository.findAllByRole_Name(backofficeUserRole.getRole().getName())
                 .stream().map(item -> new SimpleGrantedAuthority(item.getAuthority().getName())
                 ).collect(Collectors.toList());
+
+        simpleGrantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_" + backofficeUserRole.getRole().getName()));
+
+        return simpleGrantedAuthorityList;
     }
 
     private List<SimpleGrantedAuthority> getUserGrantedAuthorities(User user) {
