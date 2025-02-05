@@ -4,7 +4,6 @@ import com.ireveal.EstateRunner.apimodel.request.LoginRequest;
 import com.ireveal.EstateRunner.apimodel.response.LoginResponse;
 import com.ireveal.EstateRunner.model.User;
 import com.ireveal.EstateRunner.service.AuthenticationService;
-import com.ireveal.EstateRunner.service.DefaultUserDetailService;
 import com.ireveal.EstateRunner.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +33,6 @@ import java.util.stream.Collectors;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final DefaultUserDetailService defaultUserDetailService;
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
