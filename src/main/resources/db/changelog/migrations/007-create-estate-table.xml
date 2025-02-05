@@ -1,0 +1,57 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet id="20250205-00001" author="charles_onuorah">
+        <preConditions onFail="MARK_RAN">
+            <not >
+                <tableExists tableName="estates" />
+            </not>
+        </preConditions>
+        <createTable tableName="estates">
+            <column autoIncrement="false" name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="VARCHAR(100)">
+            </column>
+            <column name="code" type="VARCHAR(10)">
+            </column>
+
+            <column name="address" type="VARCHAR(255)" >
+                <constraints nullable="false" />
+            </column>
+
+            <column name="city" type="VARCHAR(50)">
+            </column>
+            <column name="state" type="VARCHAR(50)">
+            </column>
+
+            <column name="contactEmail" type="VARCHAR(100)">
+            </column>
+
+            <column name="contactPhone" type="VARCHAR(20)">
+            </column>
+
+            <column name="logoUrl" type="VARCHAR(300)">
+            </column>
+
+
+            <column name="is_account_non_expired" type="TINYINT" defaultValue="1" />
+            <column name="is_account_non_locked" type="TINYINT" defaultValue="1" />
+            <column name="is_credentials_non_expired" type="TINYINT" defaultValue="1" />
+            <column name="is_enabled" type="TINYINT" defaultValue="1" />
+
+            <column name="status" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="last_modified_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -2,7 +2,7 @@ package com.ireveal.EstateRunner.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ireveal.EstateRunner.entity.EstateRunnerResponse;
+import com.ireveal.EstateRunner.apimodel.response.EstateRunnerResponse;
 import com.ireveal.EstateRunner.enums.ResponseCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

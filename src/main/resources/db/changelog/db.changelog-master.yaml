@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/migrations/006-create-user-table.xml
   - include:
       file: db/changelog/migrations/005-create-backoffice-user-role.xml
+  - include:
+      file: db/changelog/migrations/007-create-estate-table.xml

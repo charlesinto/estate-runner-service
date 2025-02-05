@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableAspectJAutoProxy
 @EnableJpaAuditing
+
 public class EstateRunnerApplication {
 
 	public static void main(String[] args) {

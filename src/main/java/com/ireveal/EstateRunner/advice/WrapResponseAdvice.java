@@ -2,7 +2,7 @@ package com.ireveal.EstateRunner.advice;
 
 import com.ireveal.EstateRunner.annotations.IgnoreWrapResponse;
 import com.ireveal.EstateRunner.annotations.WrapResponse;
-import com.ireveal.EstateRunner.entity.EstateRunnerResponse;
+import com.ireveal.EstateRunner.apimodel.response.EstateRunnerResponse;
 import com.ireveal.EstateRunner.enums.ResponseCode;
 import com.ireveal.EstateRunner.util.ResponseUtilService;
 import org.springframework.core.MethodParameter;

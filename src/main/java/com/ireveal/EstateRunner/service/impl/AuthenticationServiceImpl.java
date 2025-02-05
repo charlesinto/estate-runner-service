@@ -1,10 +1,14 @@
 package com.ireveal.EstateRunner.service.impl;
 
+import com.ireveal.EstateRunner.apimodel.request.CreateUserRequestDTO;
 import com.ireveal.EstateRunner.apimodel.request.LoginRequest;
 import com.ireveal.EstateRunner.apimodel.response.LoginResponse;
+import com.ireveal.EstateRunner.entity.UserDTO;
+import com.ireveal.EstateRunner.exception.InvalidDataException;
 import com.ireveal.EstateRunner.model.User;
 import com.ireveal.EstateRunner.service.AuthenticationService;
 import com.ireveal.EstateRunner.service.JwtService;
+import com.ireveal.EstateRunner.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -33,6 +38,14 @@ import java.util.stream.Collectors;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+
+    @Override
+    public UserDTO signupUser(CreateUserRequestDTO createUserRequestDTO) throws InvalidDataException {
+        createUserRequestDTO.setPassword(passwordEncoder.encode(createUserRequestDTO.getPassword()));
+        return userService.createUser(createUserRequestDTO);
+    }
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {

@@ -1,8 +1,11 @@
 package com.ireveal.EstateRunner.controller;
 
 import com.ireveal.EstateRunner.annotations.WrapResponse;
+import com.ireveal.EstateRunner.apimodel.request.CreateUserRequestDTO;
 import com.ireveal.EstateRunner.apimodel.request.LoginRequest;
 import com.ireveal.EstateRunner.apimodel.response.LoginResponse;
+import com.ireveal.EstateRunner.entity.UserDTO;
+import com.ireveal.EstateRunner.exception.InvalidDataException;
 import com.ireveal.EstateRunner.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +32,10 @@ public class AuthenticationController {
     @PostMapping("login")
     public LoginResponse login(@RequestBody @Valid LoginRequest loginRequest){
         return authenticationService.login(loginRequest);
+    }
+
+    @PostMapping("signup")
+    public UserDTO signupUser(@RequestBody @Valid CreateUserRequestDTO createUserRequestDTO) throws InvalidDataException {
+        return  authenticationService.signupUser(createUserRequestDTO);
     }
 }

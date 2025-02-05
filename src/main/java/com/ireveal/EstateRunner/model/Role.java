@@ -23,6 +23,9 @@ public class Role extends BaseEntity{
     @Column
     private String name;
 
+    @Column
+    private String code;
+
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private Set<RolePermission> permissions = new HashSet<>();

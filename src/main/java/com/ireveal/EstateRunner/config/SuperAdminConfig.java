@@ -1,5 +1,7 @@
 package com.ireveal.EstateRunner.config;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ireveal.EstateRunner.enums.UserAuthenticationStrategy;
 import com.ireveal.EstateRunner.model.*;
 import com.ireveal.EstateRunner.repository.*;
@@ -8,13 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.*;
 
 import static com.ireveal.EstateRunner.constants.StringConstants.SUPER_ADMIN;
 
@@ -51,6 +55,7 @@ public class SuperAdminConfig implements ApplicationListener<ApplicationReadyEve
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         log.info("Admin user setup");
+        loadAppPermissions();
         setupSuperAdminPermission();
         createSuperUserAccountIfNotExists();
     }
@@ -108,5 +113,26 @@ public class SuperAdminConfig implements ApplicationListener<ApplicationReadyEve
         );
     }
 
+    private void loadAppPermissions() {
+        ClassPathResource resource = new ClassPathResource("bootstrap/permissions.json");
+        try {
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            List<String> permissionList = objectMapper.readValue(resource.getInputStream(), new TypeReference<List<String>>(){});
+
+           Set<Authority> authorityList = new HashSet<>();
+
+           for(String permission : permissionList){
+               if(authorityRepository.findByName(permission).isPresent()) continue;
+
+               authorityList.add(Authority.builder().name(permission).build());
+           }
+
+           authorityRepository.saveAll(authorityList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

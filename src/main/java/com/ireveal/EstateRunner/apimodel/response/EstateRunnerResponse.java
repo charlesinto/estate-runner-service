@@ -1,4 +1,4 @@
-package com.ireveal.EstateRunner.entity;
+package com.ireveal.EstateRunner.apimodel.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

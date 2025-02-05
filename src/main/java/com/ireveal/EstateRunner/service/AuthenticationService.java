@@ -1,7 +1,10 @@
 package com.ireveal.EstateRunner.service;
 
+import com.ireveal.EstateRunner.apimodel.request.CreateUserRequestDTO;
 import com.ireveal.EstateRunner.apimodel.request.LoginRequest;
 import com.ireveal.EstateRunner.apimodel.response.LoginResponse;
+import com.ireveal.EstateRunner.entity.UserDTO;
+import com.ireveal.EstateRunner.exception.InvalidDataException;
 
 /**
  * @author CHARLES ONUORAH
@@ -10,4 +13,6 @@ import com.ireveal.EstateRunner.apimodel.response.LoginResponse;
  */
 public interface AuthenticationService {
     LoginResponse login(LoginRequest loginRequest);
+
+    UserDTO signupUser(CreateUserRequestDTO createUserRequestDTO) throws InvalidDataException;
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -60,7 +61,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "is_enabled")
     private boolean isEnabled = true;
 
-    private Set<SimpleGrantedAuthority> authorities;
+    private Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

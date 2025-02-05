@@ -15,6 +15,10 @@
                 <constraints nullable="false" unique="true" />
             </column>
 
+            <column name="code" type="VARCHAR(30)"  >
+                <constraints nullable="false" unique="true" />
+            </column>
+
             <!--Base entity columns-->
             <column name="status" type="VARCHAR(10)">
                 <constraints nullable="false"/>
@@ -39,11 +43,11 @@
 
         </preConditions>
         <sql>
-            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(),'SUPER_ADMIN', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW());
-            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(), 'ADMIN', 'ACTIVE',  'SYSTEM', 'SYSTEM', NOW(), NOW());
-            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(), 'RESIDENT', 'ACTIVE',  'SYSTEM', 'SYSTEM', NOW(), NOW());
-            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(),'VENDOR', 'ACTIVE',  'SYSTEM', 'SYSTEM', NOW(), NOW());
-            INSERT INTO roles (id, name, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(), 'SECURITY', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW());
+            INSERT INTO roles (id, name, code, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(),'SUPER_ADMIN', '0101', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW());
+            INSERT INTO roles (id, name, code, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(), 'ADMIN', '0102', 'ACTIVE',  'SYSTEM', 'SYSTEM', NOW(), NOW());
+            INSERT INTO roles (id, name, code, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(), 'RESIDENT', '0103', 'ACTIVE',  'SYSTEM', 'SYSTEM', NOW(), NOW());
+            INSERT INTO roles (id, name, code, status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(),'VENDOR', '0104', 'ACTIVE',  'SYSTEM', 'SYSTEM', NOW(), NOW());
+            INSERT INTO roles (id, name, code,  status, created_by, modified_by, created_on, last_modified_on) VALUES (UUID(), 'SECURITY', '0105', 'ACTIVE', 'SYSTEM', 'SYSTEM', NOW(), NOW());
         </sql>
     </changeSet>
 </databaseChangeLog>

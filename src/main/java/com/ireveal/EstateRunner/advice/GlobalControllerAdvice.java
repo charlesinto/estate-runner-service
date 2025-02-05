@@ -1,6 +1,8 @@
 package com.ireveal.EstateRunner.advice;
 
-import com.ireveal.EstateRunner.entity.EstateRunnerResponse;
+import com.ireveal.EstateRunner.apimodel.response.EstateRunnerResponse;
+import com.ireveal.EstateRunner.exception.BadRequestException;
+import com.ireveal.EstateRunner.exception.InvalidDataException;
 import com.ireveal.EstateRunner.util.ResponseUtilService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +75,20 @@ public class GlobalControllerAdvice {
         return responseUtilService.buildErrorResponse(e.getMessage(), httpServletRequest);
     }
 
+    @ExceptionHandler(InvalidDataException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public EstateRunnerResponse handleInvalidDataException(Exception e, HttpServletRequest httpServletRequest){
+        log.error("Invalid data exception: {}", e);
+        return responseUtilService.buildErrorResponse(e.getMessage(), httpServletRequest);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    public EstateRunnerResponse handleBadRequestException(Exception e, HttpServletRequest httpServletRequest){
+        log.error("Bad request: {}", e);
+        return responseUtilService.buildErrorResponse(e.getMessage(), httpServletRequest);
+    }
+
     @ExceptionHandler(UndeclaredThrowableException.class)
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public EstateRunnerResponse handleReflectionException(UndeclaredThrowableException e, HttpServletRequest httpServletRequest) {
@@ -135,6 +151,8 @@ public class GlobalControllerAdvice {
     public EstateRunnerResponse handleAccessDeniedException(Exception e, HttpServletRequest httpServletRequest) {
         return responseUtilService.buildErrorResponse(ACCESS_DENIED, e, httpServletRequest);
     }
+
+
 
 
     @ExceptionHandler(BindException.class)
