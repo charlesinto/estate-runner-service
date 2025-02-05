@@ -41,6 +41,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!authentication.isAuthenticated())
             throw new UsernameNotFoundException("User not found");
 
+        return handleLoginRequest(authentication);
+    }
+
+    private LoginResponse handleLoginRequest( Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         Map<String, Object> claims = new HashMap<>();
@@ -57,7 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .token(token)
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .userName(loginRequest.getUserName())
+                .userName(user.getUsername())
                 .authorities(getAuthorities(user))
                 .build();
     }
