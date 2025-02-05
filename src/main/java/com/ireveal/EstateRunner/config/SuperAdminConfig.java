@@ -61,15 +61,15 @@ public class SuperAdminConfig implements ApplicationListener<ApplicationReadyEve
         Optional<Role> superAdminRoleOptional = roleRepository.findByName(SUPER_ADMIN);
         Role superAdminRole = superAdminRoleOptional.orElseGet(() -> roleRepository.save(Role.builder().name(SUPER_ADMIN).build()));
 
+        List<Authority> permissions = authorityRepository.findAll();
         List<RolePermission> rolePermissionList = rolePermissionRepository.findAllByRole(superAdminRole);
 
-        if (!rolePermissionList.isEmpty()) return;
+        if (rolePermissionList.size() == permissions.size()) return;
 
-        List<Authority> authorities = authorityRepository.findAll();
 
         List<RolePermission> rolePermissions = new ArrayList<>();
 
-        for (Authority authority : authorities) {
+        for (Authority authority : permissions) {
             rolePermissions.add(
                     RolePermission.builder()
                             .role(superAdminRole)
@@ -79,7 +79,6 @@ public class SuperAdminConfig implements ApplicationListener<ApplicationReadyEve
         }
 
         rolePermissionRepository.saveAll(rolePermissions);
-
 
     }
 
