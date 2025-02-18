@@ -1,14 +1,10 @@
 package com.ireveal.EstateRunner.service.impl;
 
-import com.ireveal.EstateRunner.apimodel.request.CreateUserRequestDTO;
 import com.ireveal.EstateRunner.apimodel.request.LoginRequest;
 import com.ireveal.EstateRunner.apimodel.response.LoginResponse;
-import com.ireveal.EstateRunner.entity.UserDTO;
-import com.ireveal.EstateRunner.exception.InvalidDataException;
 import com.ireveal.EstateRunner.model.User;
 import com.ireveal.EstateRunner.service.AuthenticationService;
 import com.ireveal.EstateRunner.service.JwtService;
-import com.ireveal.EstateRunner.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,26 +35,37 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
 
     @Override
-    public UserDTO signupUser(CreateUserRequestDTO createUserRequestDTO) throws InvalidDataException {
-        createUserRequestDTO.setPassword(passwordEncoder.encode(createUserRequestDTO.getPassword()));
-        return userService.createUser(createUserRequestDTO);
+    public String encode(String data) {
+        return passwordEncoder.encode(data);
     }
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        if (!authentication.isAuthenticated())
-            throw new UsernameNotFoundException("User not found");
+        Authentication authentication = getAuthentication(loginRequest);
 
         return handleLoginRequest(authentication);
     }
 
-    private LoginResponse handleLoginRequest( Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    @Override
+    public LoginResponse login(LoginRequest loginRequest, String estateName) {
+        Authentication authentication = getAuthentication(loginRequest);
+
+        return handleLoginRequest(authentication, estateName);
+    }
+
+    private Authentication getAuthentication(LoginRequest loginRequest) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword());
+
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        if (!authentication.isAuthenticated())
+            throw new UsernameNotFoundException("User not found");
+        return authentication;
+    }
+
+
+    private String generateToken(User user) {
 
         Map<String, Object> claims = new HashMap<>();
 
@@ -67,7 +74,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         claims.put("lastName", user.getLastName());
 
 
-        String token = jwtService.generateToken(claims, user);
+        return jwtService.generateToken(claims, user);
+    }
+
+
+    private LoginResponse handleLoginRequest(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        String token = generateToken(user);
+
 
         return LoginResponse
                 .builder()
@@ -76,6 +91,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .lastName(user.getLastName())
                 .userName(user.getUsername())
                 .authorities(getAuthorities(user))
+                .build();
+    }
+
+    private LoginResponse handleLoginRequest(Authentication authentication, String estateName) {
+        User user = (User) authentication.getPrincipal();
+        String token = generateToken(user);
+
+        return LoginResponse
+                .builder()
+                .token(token)
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .userName(user.getUsername())
+                .authorities(getAuthorities(user))
+                .estateName(estateName)
                 .build();
     }
 

@@ -2,6 +2,8 @@ package com.ireveal.EstateRunner.service;
 
 import com.ireveal.EstateRunner.enums.UserAuthenticationStrategy;
 import com.ireveal.EstateRunner.model.BackofficeUserRole;
+import com.ireveal.EstateRunner.model.EstateUserRole;
+import com.ireveal.EstateRunner.model.Role;
 import com.ireveal.EstateRunner.model.User;
 import com.ireveal.EstateRunner.repository.BackofficeUserRoleRepository;
 import com.ireveal.EstateRunner.repository.RolePermissionRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DefaultUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final EstateUserRoleService estateUserRoleService;
     private final RolePermissionRepository rolePermissionRepository;
     private final BackofficeUserRoleRepository backofficeUserRoleRepository;
 
@@ -49,16 +53,24 @@ public class DefaultUserDetailService implements UserDetailsService {
 
     private List<SimpleGrantedAuthority> getAdminGrantedAuthorities(User user) {
         BackofficeUserRole backofficeUserRole = backofficeUserRoleRepository.findByUser_Id(user.getId()).orElseThrow(() -> new AuthorizationException("You do not have access to this system. Please contact system administrator"));
-        List<SimpleGrantedAuthority> simpleGrantedAuthorityList = rolePermissionRepository.findAllByRole_Name(backofficeUserRole.getRole().getName())
-                .stream().map(item -> new SimpleGrantedAuthority(item.getAuthority().getName())
-                ).collect(Collectors.toList());
-
-        simpleGrantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_" + backofficeUserRole.getRole().getName()));
-
-        return simpleGrantedAuthorityList;
+        return getAuthorities(backofficeUserRole.getRole());
     }
 
     private List<SimpleGrantedAuthority> getUserGrantedAuthorities(User user) {
-        return List.of();
+        Optional<EstateUserRole> estateUserRoleOptional = estateUserRoleService.findFirstByUser(user);
+        if (estateUserRoleOptional.isEmpty())
+            return List.of();
+
+        var estateUserRole = estateUserRoleOptional.get();
+        return getAuthorities(estateUserRole.getRole());
+    }
+
+    private List<SimpleGrantedAuthority> getAuthorities(Role role) {
+        List<SimpleGrantedAuthority> simpleGrantedAuthorityList = rolePermissionRepository.findAllByRole_Name(role.getName())
+                .stream().map(item -> new SimpleGrantedAuthority(item.getAuthority().getName())
+                ).collect(Collectors.toList());
+
+        simpleGrantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        return simpleGrantedAuthorityList;
     }
 }

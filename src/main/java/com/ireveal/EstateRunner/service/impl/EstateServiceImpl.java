@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 /**
  * @author CHARLES ONUORAH
@@ -25,16 +27,21 @@ public class EstateServiceImpl implements EstateService {
     private final EstateRepository estateRepository;
 
     @Override
-    public EstateDTO createEstate(CreateEstateRequestDTO createEstateRequestDTO) {
+    public Estate createEstate(CreateEstateRequestDTO createEstateRequestDTO) {
         Estate estate = new Estate();
         BeanUtils.copyProperties(createEstateRequestDTO, estate);
         estate.setCode(generateCode());
-        return convertEntityToData(estateRepository.save(estate));
+        return estateRepository.save(estate);
     }
 
     @Override
     public EstateDTO adminSetupEstate(CreateEstateRequestDTO createEstateRequestDTO) {
         return null;
+    }
+
+    @Override
+    public Optional<Estate> findByCode(String estateCode) {
+        return estateRepository.findByCode(estateCode);
     }
 
     private EstateDTO convertEntityToData(Estate entity){

@@ -1,0 +1,43 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet id="20250205-00001" author="charles_onuorah">
+        <preConditions onFail="MARK_RAN">
+            <not >
+                <tableExists tableName="estates" />
+            </not>
+        </preConditions>
+        <createTable tableName="estate_user_role">
+            <column autoIncrement="false" name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="estate_id" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="user_id" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="role_id" type="VARCHAR(255)" >
+                <constraints nullable="false" />
+            </column>
+
+            <column name="is_active" type="TINYINT" defaultValue="1" >
+            </column>
+
+
+            <column name="status" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="last_modified_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

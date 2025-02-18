@@ -30,4 +30,6 @@ public class CreateUserRequestDTO {
     private String phoneNumber;
     @Email(message = "Email is required")
     private String email;
+    @NotBlank(message = "Estate name is required")
+    private String estateName;
 }

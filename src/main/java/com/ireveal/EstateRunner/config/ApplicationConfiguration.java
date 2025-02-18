@@ -6,6 +6,7 @@ import com.ireveal.EstateRunner.service.DefaultUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Optional;
 
@@ -28,6 +30,8 @@ import java.util.Optional;
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
+@EnableTransactionManagement
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ApplicationConfiguration {
     private final UserRepository userRepository;
 

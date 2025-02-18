@@ -20,5 +20,6 @@ public class LoginResponse {
     private String lastName;
     private String userName;
     private String token;
+    private String estateName;
     private List<String> authorities;
 }

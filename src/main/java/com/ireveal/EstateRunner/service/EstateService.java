@@ -2,6 +2,9 @@ package com.ireveal.EstateRunner.service;
 
 import com.ireveal.EstateRunner.apimodel.request.CreateEstateRequestDTO;
 import com.ireveal.EstateRunner.entity.EstateDTO;
+import com.ireveal.EstateRunner.model.Estate;
+
+import java.util.Optional;
 
 /**
  * @author CHARLES ONUORAH
@@ -10,6 +13,8 @@ import com.ireveal.EstateRunner.entity.EstateDTO;
  */
 
 public interface EstateService {
-    EstateDTO createEstate(CreateEstateRequestDTO createEstateRequestDTO);
+    Estate createEstate(CreateEstateRequestDTO createEstateRequestDTO);
     EstateDTO adminSetupEstate(CreateEstateRequestDTO createEstateRequestDTO);
+
+    Optional<Estate> findByCode(String estateCode);
 }

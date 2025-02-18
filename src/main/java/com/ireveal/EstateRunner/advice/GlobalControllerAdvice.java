@@ -3,7 +3,9 @@ package com.ireveal.EstateRunner.advice;
 import com.ireveal.EstateRunner.apimodel.response.EstateRunnerResponse;
 import com.ireveal.EstateRunner.exception.BadRequestException;
 import com.ireveal.EstateRunner.exception.InvalidDataException;
+import com.ireveal.EstateRunner.exception.ResourceNotFoundException;
 import com.ireveal.EstateRunner.util.ResponseUtilService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +89,20 @@ public class GlobalControllerAdvice {
     public EstateRunnerResponse handleBadRequestException(Exception e, HttpServletRequest httpServletRequest){
         log.error("Bad request: {}", e);
         return responseUtilService.buildErrorResponse(e.getMessage(), httpServletRequest);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public EstateRunnerResponse handleResourceNotFoundException(Exception e, HttpServletRequest httpServletRequest){
+        log.error("Not found: {}", e);
+        return responseUtilService.buildErrorResponse(e.getMessage(), httpServletRequest);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(ExpiredJwtException.class)
+    public EstateRunnerResponse hanldeExpiredJwtException(Exception e, HttpServletRequest httpServletRequest){
+        log.error("Unauthorized. token expired: {}", e);
+        return responseUtilService.buildErrorResponse("Access token expired. Please login to proceed", httpServletRequest);
     }
 
     @ExceptionHandler(UndeclaredThrowableException.class)

@@ -2,14 +2,19 @@ package com.ireveal.EstateRunner.service.impl;
 
 import com.ireveal.EstateRunner.entity.RoleDTO;
 import com.ireveal.EstateRunner.exception.BadRequestException;
+import com.ireveal.EstateRunner.exception.ResourceNotFoundException;
 import com.ireveal.EstateRunner.model.Role;
+import com.ireveal.EstateRunner.model.RolePermission;
 import com.ireveal.EstateRunner.repository.RoleRepository;
+import com.ireveal.EstateRunner.service.RolePermissionService;
 import com.ireveal.EstateRunner.service.RoleService;
 import com.ireveal.EstateRunner.util.RandomDataUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author CHARLES ONUORAH
@@ -22,6 +27,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
+    private final RolePermissionService rolePermissionService;
 
     @Override
     public RoleDTO createRole(RoleDTO roleDTO) throws BadRequestException {
@@ -32,6 +38,12 @@ public class RoleServiceImpl implements RoleService {
 
         role.setCode(generateCode());
         return convertEntityToData(roleRepository.save(role));
+    }
+
+    @Override
+    public List<RolePermission> getPermission(String roleCode) throws ResourceNotFoundException {
+        var role = roleRepository.findByCode(roleCode).orElseThrow(() -> new ResourceNotFoundException(String.format("Role not found with code: %s", roleCode)));
+        return rolePermissionService.getPermissionsByRole(role);
     }
 
     private RoleDTO convertEntityToData(Role role) {
@@ -46,6 +58,10 @@ public class RoleServiceImpl implements RoleService {
         return role;
     }
 
+    @Override
+    public Role findRoleByName(String role) throws ResourceNotFoundException {
+        return roleRepository.findByName(role).orElseThrow(() -> new ResourceNotFoundException(String.format("Role not found with name: %s", role)));
+    }
 
     private String generateCode() {
         String code = RandomDataUtil.generateRandomCode(5);

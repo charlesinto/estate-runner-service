@@ -1,8 +1,11 @@
 package com.ireveal.EstateRunner.service;
 
 import com.ireveal.EstateRunner.apimodel.request.CreateUserRequestDTO;
+import com.ireveal.EstateRunner.apimodel.request.LoginRequest;
+import com.ireveal.EstateRunner.apimodel.response.LoginResponse;
 import com.ireveal.EstateRunner.entity.UserDTO;
 import com.ireveal.EstateRunner.exception.InvalidDataException;
+import com.ireveal.EstateRunner.exception.ResourceNotFoundException;
 import com.ireveal.EstateRunner.model.User;
 
 /**
@@ -11,6 +14,7 @@ import com.ireveal.EstateRunner.model.User;
  * @Date 05/02/2025
  */
 public interface UserService {
-    UserDTO createUser(CreateUserRequestDTO userRequestDTO) throws InvalidDataException;
+    LoginResponse signUp(CreateUserRequestDTO userRequestDTO) throws InvalidDataException, ResourceNotFoundException;
     User getCurrentlyLoggedInUser();
+    LoginResponse login(LoginRequest loginRequest);
 }

@@ -6,7 +6,8 @@ import com.ireveal.EstateRunner.apimodel.request.LoginRequest;
 import com.ireveal.EstateRunner.apimodel.response.LoginResponse;
 import com.ireveal.EstateRunner.entity.UserDTO;
 import com.ireveal.EstateRunner.exception.InvalidDataException;
-import com.ireveal.EstateRunner.service.AuthenticationService;
+import com.ireveal.EstateRunner.exception.ResourceNotFoundException;
+import com.ireveal.EstateRunner.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,15 +28,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/auth")
 @WrapResponse
 public class AuthenticationController {
-    private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     @PostMapping("login")
     public LoginResponse login(@RequestBody @Valid LoginRequest loginRequest){
-        return authenticationService.login(loginRequest);
+        return userService.login(loginRequest);
     }
 
     @PostMapping("signup")
-    public UserDTO signupUser(@RequestBody @Valid CreateUserRequestDTO createUserRequestDTO) throws InvalidDataException {
-        return  authenticationService.signupUser(createUserRequestDTO);
+    public LoginResponse signupUser(@RequestBody @Valid CreateUserRequestDTO createUserRequestDTO) throws InvalidDataException, ResourceNotFoundException {
+        return  userService.signUp(createUserRequestDTO);
     }
 }

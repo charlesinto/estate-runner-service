@@ -2,6 +2,7 @@ package com.ireveal.EstateRunner.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.AuditorAware;
 
 import java.util.HashSet;
 import java.util.Set;
